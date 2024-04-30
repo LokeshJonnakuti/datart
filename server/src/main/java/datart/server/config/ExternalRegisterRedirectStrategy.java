@@ -20,6 +20,7 @@ package datart.server.config;
 
 import datart.core.base.consts.Const;
 import datart.core.base.exception.Exceptions;
+import io.github.pixee.security.Newlines;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +38,7 @@ public class ExternalRegisterRedirectStrategy {
 
     public void redirect(HttpServletRequest request, HttpServletResponse response, String token) throws Exception {
         String target = redirectUrl + "?authorization_token=" + URLEncoder.encode(token, StandardCharsets.UTF_8.name());
-        response.setHeader(Const.TOKEN, token);
+        response.setHeader(Const.TOKEN, Newlines.stripAll(token));
         response.sendRedirect(target);
     }
 

@@ -23,6 +23,7 @@ import datart.core.base.consts.Const;
 import datart.server.base.dto.ResponseData;
 import datart.server.base.params.UserLoginParam;
 import datart.server.service.ExternalRegisterService;
+import io.github.pixee.security.Newlines;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class ExternalRegisterController extends BaseController {
     public ResponseData<Object> ldapLogin(UserLoginParam loginParam, HttpServletResponse response) throws MessagingException, UnsupportedEncodingException {
         String token = externalRegisterService.ldapRegister(loginParam.getUsername(), loginParam.getPassword());
         if (StringUtils.isNotBlank(token)) {
-            response.setHeader(Const.TOKEN, token);
+            response.setHeader(Const.TOKEN, Newlines.stripAll(token));
             return ResponseData.success(null);
         }
         return ResponseData.failure("ldap login fail");
