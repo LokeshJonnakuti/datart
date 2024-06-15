@@ -27,6 +27,7 @@ import datart.data.provider.calcite.dialect.H2Dialect;
 import datart.data.provider.jdbc.DataTypeUtils;
 import datart.data.provider.jdbc.ResultSetMapper;
 import datart.data.provider.jdbc.SqlScriptRender;
+import java.sql.PreparedStatement;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.commons.collections4.CollectionUtils;
@@ -246,8 +247,9 @@ public class LocalDB {
      */
     public static boolean checkCacheExpired(String cacheKey) throws SQLException {
         try (Connection connection = getConnection(true, null)) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM `cache_expire` WHERE `source_id`='" + cacheKey + "'");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `cache_expire` WHERE `source_id`=?");
+            statement.setString(1, cacheKey);
+            ResultSet resultSet = statement.execute();
             if (resultSet.next()) {
                 Timestamp cacheExpire = resultSet.getTimestamp("expire_time");
                 if (cacheExpire.after(new java.util.Date())) {
