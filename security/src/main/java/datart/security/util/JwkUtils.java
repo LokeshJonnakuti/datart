@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import datart.core.base.exception.Exceptions;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -100,7 +102,7 @@ public class JwkUtils {
     public static List<Key> getJwKFromUrl(String jwkSetUrl) {
         List<Key> keys = Lists.newArrayList();
         try {
-            RemoteJWKSet remoteJWKSet = new RemoteJWKSet(new URL(jwkSetUrl));
+            RemoteJWKSet remoteJWKSet = new RemoteJWKSet(Urls.create(jwkSetUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             JWKMatcher jwkMatcher = (new JWKMatcher.Builder()).keyUses(KeyUse.SIGNATURE, KeyUse.ENCRYPTION, null).keyTypes(KeyType.OCT, KeyType.RSA, KeyType.EC).build();
             JWKSelector jwsKeySelector = new JWKSelector(jwkMatcher);
             List list = remoteJWKSet.get(jwsKeySelector, null);
@@ -114,7 +116,7 @@ public class JwkUtils {
     public static Key getJwKFromUrlByKid(String jwkSetUrl, String kid) {
         Key key = null;
         try {
-            RemoteJWKSet set = new RemoteJWKSet(new URL(jwkSetUrl));
+            RemoteJWKSet set = new RemoteJWKSet(Urls.create(jwkSetUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             JWKSet cachedJWKSet = set.getCachedJWKSet();
             JWK jwk = cachedJWKSet.getKeyByKeyId(kid);
             List<Key> keys = KeyConverter.toJavaKeys(Collections.singletonList(jwk));
