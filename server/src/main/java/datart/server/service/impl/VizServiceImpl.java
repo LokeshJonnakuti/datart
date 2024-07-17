@@ -33,6 +33,7 @@ import datart.server.base.params.*;
 import datart.server.base.transfer.*;
 import datart.server.base.transfer.model.*;
 import datart.server.service.*;
+import io.github.pixee.security.ObjectInputFilters;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -593,6 +594,7 @@ public class VizServiceImpl extends BaseService implements VizService {
 
     public TransferModel extractModel(MultipartFile file) throws IOException, ClassNotFoundException {
         try (ObjectInputStream inputStream = new ObjectInputStream(new GZIPInputStream(file.getInputStream()));) {
+            ObjectInputFilters.enableObjectFilterIfUnprotected(inputStream);
             return (TransferModel) inputStream.readObject();
         }
     }
