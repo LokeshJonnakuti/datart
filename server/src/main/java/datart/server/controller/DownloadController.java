@@ -23,6 +23,7 @@ import datart.core.entity.Download;
 import datart.server.base.dto.ResponseData;
 import datart.server.base.params.DownloadCreateParam;
 import datart.server.service.DownloadService;
+import io.github.pixee.security.Newlines;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.http.fileupload.util.Streams;
@@ -69,7 +70,7 @@ public class DownloadController extends BaseController {
         Download download = downloadService.downloadFile(id);
         response.setHeader("Content-Type", "application/octet-stream");
         File file = new File(FileUtils.withBasePath(download.getPath()));
-        response.setHeader("Content-Disposition", String.format("attachment;filename=\"%s\"", URLEncoder.encode(file.getName(), "utf-8")));
+        response.setHeader("Content-Disposition", Newlines.stripAll(String.format("attachment;filename=\"%s\"", URLEncoder.encode(file.getName(), "utf-8"))));
         try (InputStream inputStream = new FileInputStream(file)) {
             Streams.copy(inputStream, response.getOutputStream(), true);
         }

@@ -32,6 +32,7 @@ import datart.server.base.dto.ResponseData;
 import datart.server.base.dto.UserProfile;
 import datart.server.base.params.*;
 import datart.server.service.UserService;
+import io.github.pixee.security.Newlines;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -123,7 +124,7 @@ public class UserController extends BaseController {
                 loginParam.getPassword(),
                 System.currentTimeMillis());
         String token = userService.login(passwordToken);
-        response.setHeader(Const.TOKEN, token);
+        response.setHeader(Const.TOKEN, Newlines.stripAll(token));
         return ResponseData.success(new UserBaseInfo(securityManager.getCurrentUser()));
 
     }

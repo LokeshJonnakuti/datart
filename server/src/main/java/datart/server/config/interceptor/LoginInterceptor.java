@@ -24,6 +24,7 @@ import datart.core.base.exception.Exceptions;
 import datart.core.common.RequestContext;
 import datart.security.exception.AuthException;
 import datart.security.manager.DatartSecurityManager;
+import io.github.pixee.security.Newlines;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -52,7 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (token != null) {
             try {
                 token = securityManager.login(token);
-                response.setHeader(Const.TOKEN, token);
+                response.setHeader(Const.TOKEN, Newlines.stripAll(token));
                 return securityManager.isAuthenticated();
             } catch (Exception e) {
                 loginException = e;
