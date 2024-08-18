@@ -18,13 +18,14 @@
 package datart.core.cluster.gossip;
 
 
+import java.security.SecureRandom;
 import javax.management.Notification;
 import javax.management.NotificationListener;
 import java.util.Random;
 
 public class SyncGossiperStatus implements NotificationListener {
 
-    private final Random random = new Random();
+    private final Random random = new SecureRandom();
 
     @Override
     public void handleNotification(Notification notification, Object handback) {

@@ -19,6 +19,7 @@
 package datart.security.util;
 
 
+import java.security.SecureRandom;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
@@ -39,7 +40,7 @@ public class SecurityUtils {
     };
 
     public static String randomPassword(Integer length) {
-        IntStream intStream = new Random().ints(0, SEEDS.length);
+        IntStream intStream = new SecureRandom().ints(0, SEEDS.length);
         return intStream.limit(length).mapToObj(i -> SEEDS[i]).map(String::valueOf).collect(Collectors.joining());
     }
 
