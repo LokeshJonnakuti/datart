@@ -27,6 +27,7 @@ import datart.server.service.BaseService;
 import datart.server.service.FileService;
 import datart.server.service.OrgService;
 import datart.server.service.UserService;
+import io.github.pixee.security.Filenames;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -96,7 +97,7 @@ public class FileServiceImpl extends BaseService implements FileService {
                 requireExists(ownerId, Datachart.class);
                 break;
         }
-        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, StringUtils.isBlank(fileName) ? file.getOriginalFilename() : fileName);
+        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, StringUtils.isBlank(fileName) ? Filenames.toSimpleFileName(file.getOriginalFilename()) : fileName);
         String fullPath = FileUtils.withBasePath(filePath);
         FileUtils.mkdirParentIfNotExist(fullPath);
         file.transferTo(new File(fullPath));
@@ -107,7 +108,7 @@ public class FileServiceImpl extends BaseService implements FileService {
 
         requireExists(userId, User.class);
 
-        String filePath = FileUtils.concatPath(FileOwner.USER_AVATAR.getPath(), userId, file.getOriginalFilename());
+        String filePath = FileUtils.concatPath(FileOwner.USER_AVATAR.getPath(), userId, Filenames.toSimpleFileName(file.getOriginalFilename()));
 
         String fullPath = FileUtils.withBasePath(filePath);
 
@@ -128,7 +129,7 @@ public class FileServiceImpl extends BaseService implements FileService {
 
         requireExists(orgId, Organization.class);
 
-        String filePath = FileUtils.concatPath(FileOwner.ORG_AVATAR.getPath(), orgId, file.getOriginalFilename());
+        String filePath = FileUtils.concatPath(FileOwner.ORG_AVATAR.getPath(), orgId, Filenames.toSimpleFileName(file.getOriginalFilename()));
 
         String fullPath = FileUtils.withBasePath(filePath);
 
@@ -150,7 +151,7 @@ public class FileServiceImpl extends BaseService implements FileService {
 
         requireExists(ownerId, Source.class);
 
-        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, System.currentTimeMillis() + "-" + file.getOriginalFilename());
+        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, System.currentTimeMillis() + "-" + Filenames.toSimpleFileName(file.getOriginalFilename()));
 
         String fullPath = FileUtils.withBasePath(filePath);
 
