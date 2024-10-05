@@ -18,6 +18,8 @@
 package datart.core.common;
 
 import datart.core.base.exception.Exceptions;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.*;
@@ -135,7 +137,7 @@ public class WebUtils {
         options.addArguments("window-size=2048,1536");
 
         if (isRemoteDriver(driverPath)) {
-            return new RemoteWebDriver(new URL(driverPath), options);
+            return new RemoteWebDriver(Urls.create(driverPath, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS), options);
         }
 
         System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, driverPath);

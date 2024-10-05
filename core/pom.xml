@@ -169,7 +169,10 @@
             <artifactId>javassist</artifactId>
             <version>3.28.0-GA</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.github.pixee</groupId>
+            <artifactId>java-security-toolkit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
