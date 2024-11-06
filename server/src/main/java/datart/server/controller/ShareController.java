@@ -27,6 +27,7 @@ import datart.server.base.dto.ResponseData;
 import datart.server.base.dto.ShareInfo;
 import datart.server.base.params.*;
 import datart.server.service.ShareService;
+import io.github.pixee.security.Newlines;
 import io.swagger.annotations.ApiOperation;
 import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.springframework.validation.annotation.Validated;
@@ -134,7 +135,7 @@ public class ShareController extends BaseController {
         response.setHeader("Content-Type", "application/octet-stream");
         File file = new File(FileUtils.withBasePath(download.getPath()));
         try (InputStream inputStream = new FileInputStream(file)) {
-            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", URLEncoder.encode(file.getName(), "utf-8")));
+            response.setHeader("Content-Disposition", Newlines.stripAll(String.format("attachment; filename=\"%s\"", URLEncoder.encode(file.getName(), "utf-8"))));
             Streams.copy(inputStream, response.getOutputStream(), true);
         }
     }
